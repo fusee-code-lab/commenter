@@ -1,3 +1,4 @@
+import { UserService } from "@/services/user_service";
 import { FastifyPluginAsync } from "fastify";
 import { z } from "zod";
 
@@ -11,6 +12,7 @@ export const UserRoutes: FastifyPluginAsync = async (server) => {
         })
     }
   }, async (request, reply) => {
+    const service = server.container.resolve(UserService);
     return { hello: "world" };
   });
 };

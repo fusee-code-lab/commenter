@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 import fastify, { errorCodes } from "fastify";
 import { env } from "./env";
 import prismaPlugin from "./plugins/prisma";
@@ -5,9 +7,10 @@ import fastifyCookie from "@fastify/cookie";
 import fastifySession from "@fastify/session";
 import { UserRoutes } from "./routes/users";
 import { ZodTypeProvider, serializerCompiler, validatorCompiler } from "fastify-type-provider-zod";
-import { ZodError } from "zod";
 import _ from "lodash";
 import errorHandlerPlugin from "./plugins/error_handler";
+
+import dependencyInjectionPlugin from "./plugins/dependency_injection";
 
 async function main() {
   const app = fastify({
@@ -34,6 +37,7 @@ async function main() {
   app.register(fastifyCookie);
   app.register(fastifySession, { secret: env.SESSION_SECRET });
   app.register(errorHandlerPlugin)
+  app.register(dependencyInjectionPlugin)
 
   // setup routes
   app.register(UserRoutes, { prefix: "/users" });
