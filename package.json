@@ -6,14 +6,20 @@
     "prettier": "prettier --write ."
   },
   "dependencies": {
+    "@fastify/cookie": "^9.3.1",
+    "@fastify/session": "^10.7.0",
     "@prisma/client": "5.11.0",
     "dotenv": "^16.4.5",
     "fastify": "^4.26.2",
+    "fastify-plugin": "^4.5.1",
+    "fastify-type-provider-zod": "^1.1.9",
+    "lodash": "^4.17.21",
     "pino-pretty": "^10.3.1",
     "prisma": "^5.11.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.0",
     "@types/node": "^20.11.28",
     "prettier": "^3.2.5",
     "tsup": "^8.0.2",
