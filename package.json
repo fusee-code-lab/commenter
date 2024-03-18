@@ -6,9 +6,11 @@
     "prettier": "prettier --write ."
   },
   "dependencies": {
+    "@prisma/client": "5.11.0",
     "dotenv": "^16.4.5",
     "fastify": "^4.26.2",
     "pino-pretty": "^10.3.1",
+    "prisma": "^5.11.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
