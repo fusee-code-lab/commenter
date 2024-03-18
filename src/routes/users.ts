@@ -1,10 +1,10 @@
 import { UserService } from "@/services/user_service";
-import { ResponsePack } from "@/utils/response_pack";
+import { ResponsePack } from "@/utils/restful";
 import { FastifyPluginAsync } from "fastify";
 import { z } from "zod";
 
 const userSignupSchema = z.object({
-  email: z.string().email(),
+  email: z.string().email().optional(),
   username: z.string().min(3),
   password: z.string().min(8),
 });
@@ -17,8 +17,8 @@ export const UserRoutes: FastifyPluginAsync = async (server) => {
       const service = server.container.resolve(UserService);
       const newUser = await service.createUser(
         request.body.username,
-        request.body.email,
         request.body.password,
+        request.body.email,
       );
 
       return ResponsePack({ data: newUser, message: "User created" });

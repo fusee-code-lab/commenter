@@ -11,6 +11,7 @@ import _ from "lodash";
 import errorHandlerPlugin from "./plugins/error_handler";
 
 import dependencyInjectionPlugin from "./plugins/dependency_injection";
+import { AuthRoutes } from "./routes/auth";
 
 async function main() {
   const app = fastify({
@@ -41,6 +42,7 @@ async function main() {
 
   // setup routes
   app.register(UserRoutes, { prefix: "/users" });
+  app.register(AuthRoutes, { prefix: "/auth" })
 
   // starting server
   try {
