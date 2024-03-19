@@ -2,7 +2,6 @@ import "reflect-metadata";
 
 import fastify, { errorCodes } from "fastify";
 import { env } from "./env";
-import prismaPlugin from "./plugins/prisma";
 import fastifyCookie from "@fastify/cookie";
 import fastifySession from "@fastify/session";
 import { UserRoutes } from "./routes/users";
@@ -12,8 +11,20 @@ import errorHandlerPlugin from "./plugins/error_handler";
 
 import dependencyInjectionPlugin from "./plugins/dependency_injection";
 import { AuthRoutes } from "./routes/auth";
+import { container } from "tsyringe";
+import { PrismaClient } from "@prisma/client";
+import { PrismaSessionStore } from "./services/session_store";
 
 async function main() {
+  const isProduction = env.NODE_ENV === "production";
+
+  // create database client
+  const prisma = new PrismaClient();
+  await prisma.$connect();
+
+  // setup dependencies injection container
+  container.register(PrismaClient, { useValue: prisma });
+
   const app = fastify({
     logger: {
       transport:
@@ -34,15 +45,23 @@ async function main() {
   app.withTypeProvider<ZodTypeProvider>();
 
   // register plugins
-  app.register(prismaPlugin);
   app.register(fastifyCookie);
-  app.register(fastifySession, { secret: env.SESSION_SECRET });
-  app.register(errorHandlerPlugin)
-  app.register(dependencyInjectionPlugin)
+  app.register(fastifySession, {
+    secret: env.SESSION_SECRET,
+    cookie: {
+      secure: isProduction,
+      maxAge: env.SESSION_MAX_AGE_SECONDS,
+    },
+    // see https://github.com/fastify/session?tab=readme-ov-file#saveuninitialized-optional
+    saveUninitialized: false,
+    store: container.resolve(PrismaSessionStore)
+  });
+  app.register(errorHandlerPlugin);
+  app.register(dependencyInjectionPlugin);
 
   // setup routes
   app.register(UserRoutes, { prefix: "/users" });
-  app.register(AuthRoutes, { prefix: "/auth" })
+  app.register(AuthRoutes, { prefix: "/auth" });
 
   // starting server
   try {

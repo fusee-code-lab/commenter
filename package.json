@@ -4,7 +4,8 @@
     "build": "tsup --env.NODE_ENV production",
     "start": "NODE_ENV=production node dist/main.js",
     "prettier": "prettier --write .",
-    "prisma": "prisma"
+    "prisma": "prisma",
+    "generate-session-key": "@fastify/secure-session > secret-key"
   },
   "dependencies": {
     "@fastify/cookie": "^9.3.1",

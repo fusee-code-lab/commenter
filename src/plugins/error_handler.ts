@@ -15,6 +15,7 @@ const errorHandlerPlugin = fastifyPlugin(async (app, options) => {
         message: error.errors,
       });
     } else {
+      // TODO: ignore error stack here
       // remove code in error if in production
       reply.status(error.statusCode || 500).send(isProduction ? _.omit(error, "code") : error);
     }
