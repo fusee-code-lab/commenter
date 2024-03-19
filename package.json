@@ -17,6 +17,7 @@
     "fastify": "^4.26.2",
     "fastify-plugin": "^4.5.1",
     "fastify-type-provider-zod": "^1.1.9",
+    "http-status": "^1.7.4",
     "lodash": "^4.17.21",
     "pino-pretty": "^10.3.1",
     "prisma": "^5.11.0",

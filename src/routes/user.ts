@@ -1,6 +1,7 @@
 import { UserService } from "@/services/user_service";
-import { ResponsePack } from "@/utils/restful";
-import { FastifyPluginAsync } from "fastify";
+import { ResponsePack, UnauthorizedError } from "@/utils/restful";
+import fastify, { FastifyPluginAsync } from "fastify";
+import httpStatus from "http-status";
 import { z } from "zod";
 
 const userSignupSchema = z.object({
@@ -21,7 +22,20 @@ export const UserRoutes: FastifyPluginAsync = async (server) => {
         request.body.email,
       );
 
-      return ResponsePack({ data: newUser, message: "User created" });
+      return ResponsePack({
+        data: newUser,
+        message: "User created",
+        statusCode: httpStatus.CREATED,
+      });
     },
   );
+
+  // retrive self info
+  server.get("/", async (request, reply) => {
+    // reply 401 if not logged in
+    if (!request.session.user) {
+      throw UnauthorizedError();
+    }
+    return ResponsePack({ data: request.session.user });
+  });
 };

@@ -4,7 +4,7 @@ import fastify, { errorCodes } from "fastify";
 import { env } from "./env";
 import fastifyCookie from "@fastify/cookie";
 import fastifySession from "@fastify/session";
-import { UserRoutes } from "./routes/users";
+import { UserRoutes } from "./routes/user";
 import { ZodTypeProvider, serializerCompiler, validatorCompiler } from "fastify-type-provider-zod";
 import _ from "lodash";
 import errorHandlerPlugin from "./plugins/error_handler";
@@ -60,7 +60,7 @@ async function main() {
   app.register(dependencyInjectionPlugin);
 
   // setup routes
-  app.register(UserRoutes, { prefix: "/users" });
+  app.register(UserRoutes, { prefix: "/user" });
   app.register(AuthRoutes, { prefix: "/auth" });
 
   // starting server
