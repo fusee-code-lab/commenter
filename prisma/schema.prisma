@@ -15,4 +15,17 @@ model User {
   email String?  @unique
   name  String
   secret String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("users")
+}
+
+model Session {
+  id        BigInt   @id @default(autoincrement())
+  sid       String   @unique
+  expires   DateTime
+  data      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("sessions")
 }
